@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Every U.S. recall in one place</title>
+<meta name="description" content="Food, drug, medical device, consumer product and vehicle recalls from the FDA, CPSC and NHTSA — searchable in one place.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Every U.S. recall in one place">
+<meta property="og:description" content="Four agencies publish recalls separately. This searches them together.">
+<meta property="og:url" content="https://fdarecalltracker.com/recalls.html">
+<meta property="og:image" content="https://fdarecalltracker.com/preview.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#EDE8DE">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Public+Sans:wght@400;600;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#EDE8DE;--paper2:#E3DCCE;--ink:#141210;--soft:#57524A;--meta:#8A8578;
+ --stamp:#D6273A;--hazard:#F2B705;--pass:#2E6B4F;--rule:#C9C0AE;
+ --disp:'Big Shoulders Display',Impact,sans-serif;--body:'Public Sans',system-ui,sans-serif;
+ --mono:'IBM Plex Mono',monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);
+ background-image:repeating-linear-gradient(0deg,rgba(20,18,16,.014) 0 1px,transparent 1px 3px)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--stamp);outline-offset:2px}
+.wrap{max-width:1340px;margin:0 auto;padding:0 clamp(14px,3vw,34px)}
+header{border-bottom:2px solid var(--ink);padding:16px 0 14px}
+.back{display:inline-block;margin-bottom:10px;font-family:var(--mono);font-size:11px;
+ letter-spacing:.13em;text-transform:uppercase;color:var(--meta);text-decoration:none;
+ border-bottom:1px solid var(--rule);padding-bottom:2px}
+.back:hover{color:var(--stamp);border-color:var(--stamp)}
+h1{font-family:var(--disp);font-weight:900;text-transform:uppercase;
+ font-size:clamp(30px,6vw,66px);line-height:.86;margin:0 0 8px;letter-spacing:-.01em}
+h1 em{font-style:normal;color:var(--stamp)}
+.lede{max-width:76ch;color:var(--soft);font-size:15px;line-height:1.55;margin:0}
+.lede b{color:var(--ink)}
+
+.srcs{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--ink);
+ border-bottom:2px solid var(--ink);margin-top:14px}
+.src{padding:10px 14px;border-right:1px solid var(--rule)}
+.src:last-child{border-right:0}
+.src b{display:block;font-family:var(--disp);font-weight:900;font-size:clamp(20px,2.6vw,32px);line-height:1}
+.src span{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;
+ color:var(--meta);display:block;margin-top:4px}
+.src.off b{color:var(--meta)}
+.src.off{background:rgba(201,192,174,.2)}
+
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch;padding:14px 0 8px}
+.bar input[type=search]{flex:1 1 240px;min-width:0;border:2px solid var(--ink);background:transparent;
+ padding:10px 13px;font-family:var(--mono);font-size:13px;color:var(--ink);border-radius:0}
+.seg{display:flex;border:2px solid var(--ink);flex-wrap:wrap}
+.seg button{background:transparent;border:0;border-right:1px solid var(--rule);cursor:pointer;
+ padding:10px 13px;font-family:var(--mono);font-size:11px;letter-spacing:.09em;
+ text-transform:uppercase;color:var(--soft);white-space:nowrap}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.seg button[disabled]{opacity:.35;cursor:default;text-decoration:line-through}
+.seg button em{font-style:normal;opacity:.55;margin-left:5px}
+.status{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+ color:var(--meta);padding:4px 0 12px}
+
+.list{border:2px solid var(--ink)}
+.row{display:grid;grid-template-columns:96px 92px 1fr 200px 26px;width:100%;text-align:left;
+ background:transparent;border:0;border-bottom:1px solid var(--rule);font:inherit;color:inherit;
+ cursor:pointer;padding:0}
+.row:last-child{border-bottom:0}
+.row:nth-child(even){background:rgba(201,192,174,.16)}
+.row:hover{background:rgba(214,39,58,.07)}
+.row>div{padding:9px 11px;border-right:1px solid var(--rule);min-width:0}
+.row>div:last-child{border-right:0}
+.c-date{font-family:var(--mono);font-size:11.5px;color:var(--soft);white-space:nowrap}
+.c-src{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.c-src i{font-style:normal;display:block;color:var(--meta);font-weight:400;margin-top:3px}
+.row[data-sev="1"]{box-shadow:inset 5px 0 0 var(--stamp)}
+.row[data-sev="2"]{box-shadow:inset 5px 0 0 var(--hazard)}
+.row[data-sev="3"]{box-shadow:inset 5px 0 0 var(--rule)}
+.row[data-sev="1"] .c-src{color:var(--stamp)}
+.row[data-sev="2"] .c-src{color:#9C7405}
+.c-prod{font-weight:600;font-size:13.5px;line-height:1.35}
+.c-prod small{display:block;font-weight:400;color:var(--soft);font-size:12.5px;margin-top:3px}
+.c-firm{font-size:12.5px;color:var(--soft);line-height:1.35}
+.c-tog{font-family:var(--mono);font-size:14px;color:var(--meta);text-align:center;padding:9px 4px}
+.row[aria-expanded=true] .c-tog{color:var(--stamp)}
+.detail{border-bottom:1px solid var(--rule);background:var(--paper2);padding:13px 18px 15px;
+ display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px 24px}
+.dt b{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;
+ text-transform:uppercase;color:var(--meta);margin-bottom:3px}
+.dt span{font-size:13px;line-height:1.5;word-break:break-word;display:block}
+.dt.wide{grid-column:1/-1}
+.dt code{font-family:var(--mono);font-size:11.5px;background:rgba(20,18,16,.06);padding:2px 5px}
+.dt a{color:var(--stamp);font-weight:600}
+@media(max-width:940px){
+ .row{grid-template-columns:1fr 1fr auto;padding:4px 0}
+ .row>div{border-right:0;padding:6px 11px}
+ .c-src{order:0}.c-date{order:1;text-align:right}.c-tog{order:2;align-self:center}
+ .c-prod{grid-column:1/-1;order:3}.c-firm{grid-column:1/-1;order:4}
+}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+ padding:12px;border-top:2px solid var(--ink);font-family:var(--mono);font-size:11px;
+ letter-spacing:.07em;text-transform:uppercase;color:var(--meta)}
+.btn{background:var(--ink);color:var(--paper);border:0;cursor:pointer;padding:10px 20px;
+ font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase}
+.btn:hover{background:var(--stamp)}
+.btn[disabled]{opacity:.35;cursor:default}
+.state{padding:34px 18px;text-align:center;font-family:var(--mono);font-size:13px;color:var(--soft)}
+.state b{display:block;font-family:var(--disp);font-size:24px;font-weight:900;
+ text-transform:uppercase;color:var(--ink);margin-bottom:7px}
+
+section{padding:30px 0}
+h2{font-family:var(--disp);font-weight:900;text-transform:uppercase;
+ font-size:clamp(22px,3.4vw,38px);margin:0 0 4px;line-height:.92}
+.sub{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+ color:var(--meta);margin:0 0 14px}
+.veh{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.veh input{border:2px solid var(--ink);background:transparent;padding:10px 12px;
+ font-family:var(--mono);font-size:13px;color:var(--ink);flex:1 1 150px;min-width:0}
+#vout .row{grid-template-columns:110px 1fr 26px}
+@media(max-width:940px){#vout .row{grid-template-columns:1fr auto}}
+footer{border-top:2px solid var(--ink);padding:20px 0 38px;font-family:var(--mono);
+ font-size:11px;color:var(--meta);line-height:1.7}
+footer p{max-width:90ch;margin:0 0 8px}
+footer a{color:var(--soft)}
+</style>
+</head>
+<body>
+
+<header><div class="wrap">
+  <a class="back" href="/">&larr; Recalls &middot; live ledger</a>
+  <h1>Every recall,<em>one page</em></h1>
+  <p class="lede">American recalls are split across four federal agencies that publish separately and never cross-reference each other. Search food, drugs, medical devices, consumer products and vehicles together &mdash; <b>pulled live from each agency, not a copy</b>.</p>
+  <div class="srcs">
+    <div class="src"><b id="n-fda">—</b><span>FDA &middot; food, drug, device</span></div>
+    <div class="src"><b id="n-cpsc">—</b><span>CPSC &middot; consumer products</span></div>
+    <div class="src"><b id="n-nhtsa">by vehicle</b><span>NHTSA &middot; vehicles &amp; car seats</span></div>
+    <div class="src off"><b>USDA</b><span>Meat &amp; poultry &mdash; see note</span></div>
+  </div>
+</div></header>
+
+<section><div class="wrap">
+  <div class="bar">
+    <input type="search" id="q" placeholder="Search product, company, hazard…" aria-label="Search recalls">
+    <div class="seg" id="src" role="group" aria-label="Filter by agency">
+      <button data-s="all" aria-pressed="true">All</button>
+      <button data-s="food" aria-pressed="false">Food<em id="c-food"></em></button>
+      <button data-s="drug" aria-pressed="false">Drugs<em id="c-drug"></em></button>
+      <button data-s="device" aria-pressed="false">Devices<em id="c-device"></em></button>
+      <button data-s="consumer" aria-pressed="false">Consumer<em id="c-consumer"></em></button>
+    </div>
+    <div class="seg" id="sev" role="group" aria-label="Filter by severity">
+      <button data-v="all" aria-pressed="true">Any risk</button>
+      <button data-v="1" aria-pressed="false">Most severe</button>
+    </div>
+  </div>
+  <p class="status" id="status">Loading from three agencies…</p>
+
+  <div class="list">
+    <div id="rows"><div class="state"><b>Loading</b>Fetching live from the FDA and CPSC.</div></div>
+    <div class="foot">
+      <span id="count">—</span>
+      <button class="btn" id="more">Show 100 more</button>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Vehicles &amp; car seats</h2>
+  <p class="sub">NHTSA publishes per vehicle, not as a feed &mdash; look yours up</p>
+  <div class="veh">
+    <input id="v-make" placeholder="Make — e.g. Honda" aria-label="Vehicle make">
+    <input id="v-model" placeholder="Model — e.g. Accord" aria-label="Vehicle model">
+    <input id="v-year" placeholder="Year — e.g. 2020" inputmode="numeric" aria-label="Model year">
+    <button class="btn" id="v-go">Check</button>
+  </div>
+  <div class="list" id="vwrap" hidden><div id="vout"></div></div>
+</div></section>
+
+<footer><div class="wrap">
+  <p><b>Sources.</b> FDA food, drug and device enforcement reports via openFDA. Consumer products via CPSC SaferProducts. Vehicles via NHTSA. All are U.S. federal public records, queried live from your browser each time you load this page.</p>
+  <p><b>Meat, poultry and processed eggs are missing.</b> They are regulated by USDA FSIS, not the FDA, and FSIS blocks automated requests from most networks. Check <a href="https://www.fsis.usda.gov/recalls" target="_blank" rel="noopener">fsis.usda.gov/recalls</a> directly for deli meat, ground beef and poultry.</p>
+  <p>Agency data is provided as-is and may be incomplete or delayed &mdash; <em>do not use this site for decisions about food safety, medication or medical care.</em> Authoritative sources: <a href="https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts" target="_blank" rel="noopener">fda.gov</a>, <a href="https://www.cpsc.gov/Recalls" target="_blank" rel="noopener">cpsc.gov</a>, <a href="https://www.nhtsa.gov/recalls" target="_blank" rel="noopener">nhtsa.gov</a>.</p>
+  <p>Not affiliated with the FDA, USDA, CPSC, NHTSA or any government agency.</p>
+</div></footer>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const clip=(s,n)=>{s=String(s??'').trim();return s.length>n?s.slice(0,n-1).trimEnd()+'…':s};
+const fmt=d=>d?`${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}/${String(d.getFullYear()).slice(2)}`:'';
+
+const PAGE=100;
+let ALL=[], shown=PAGE, fSrc='all', fSev='all', q='';
+
+/* ---------- normalise every agency onto one record ---------- */
+const SEV={'Class I':1,'Class II':2,'Class III':3};
+const fdaDate=s=>s&&s.length===8?new Date(+s.slice(0,4),+s.slice(4,6)-1,+s.slice(6,8)):null;
+
+async function jget(u){const r=await fetch(u);if(!r.ok&&r.status!==404)throw new Error(r.status);
+  return r.status===404?null:r.json();}
+
+async function loadFDA(cat){
+  const to=new Date(), from=new Date(to-540*864e5);
+  const d=s=>s.toISOString().slice(0,10).replace(/-/g,'');
+  const base=`https://api.fda.gov/${cat}/enforcement.json`+
+    `?search=report_date:%5B${d(from)}+TO+${d(to)}%5D&sort=report_date:desc&limit=1000`;
+  /* openFDA caps a single request at 1000 rows — page through with skip */
+  let raw=[];
+  for(let skip=0; skip<4000; skip+=1000){
+    const j=await jget(`${base}&skip=${skip}`);
+    const got=j?.results||[];
+    raw=raw.concat(got);
+    if(got.length<1000) break;
+  }
+  return raw.map(r=>({
+    src:'FDA', cat, id:r.recall_number, ev:r.event_id,
+    date:fdaDate(r.report_date), sev:SEV[r.classification]||null, sevLabel:r.classification,
+    product:r.product_description||'', reason:r.reason_for_recall||'',
+    firm:r.recalling_firm||'', where:[r.city,r.state].filter(Boolean).join(', '),
+    codes:r.code_info||'', dist:r.distribution_pattern||'', qty:r.product_quantity||'',
+    status:r.status||'', url:'https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts'
+  }));
+}
+
+async function loadCPSC(){
+  const since=new Date(Date.now()-540*864e5).toISOString().slice(0,10);
+  const url=`https://www.saferproducts.gov/RestWebServices/Recall?format=json&RecallDateStart=${since}`;
+  /* CPSC intermittently answers 503, or returns a single stub row whose Title
+     carries an error string. Both mean "try again", so retry before giving up. */
+  let rows=null;
+  for(let attempt=0; attempt<3; attempt++){
+    try{
+      const j=await jget(url);
+      const ok=Array.isArray(j)&&j.some(r=>r.RecallID);
+      if(ok){ rows=j; break; }
+    }catch(e){}
+    await new Promise(r=>setTimeout(r,1500*(attempt+1)));
+  }
+  if(!rows) throw new Error('CPSC unavailable');
+  return rows.filter(r=>r.RecallID).map(r=>{
+    const inj=(r.Injuries||[]).map(i=>i.Name).join(' ');
+    const hurt=inj&&!/none reported/i.test(inj);
+    return {
+      src:'CPSC', cat:'consumer', id:r.RecallNumber||String(r.RecallID), ev:null,
+      date:r.RecallDate?new Date(r.RecallDate):null,
+      sev:hurt?1:2, sevLabel:hurt?'Injuries reported':'No injuries reported',
+      product:(r.Products||[]).map(p=>p.Name).join('; ')||r.Title||'',
+      reason:(r.Hazards||[]).map(h=>h.Name).join('; ')||r.Description||'',
+      firm:(r.Manufacturers||[])[0]?.Name||'',
+      where:'', codes:(r.ProductUPCs||[]).map(u=>u.UPC).join(', '),
+      dist:(r.Retailers||[]).map(x=>x.Name).join(', '), qty:'',
+      status:'', injury:inj, title:r.Title, desc:r.Description, url:r.URL
+    };
+  });
+}
+
+/* ---------- render ---------- */
+function match(r){
+  if(fSrc!=='all' && r.cat!==fSrc) return false;
+  if(fSev==='1' && r.sev!==1) return false;
+  if(q && !(`${r.product} ${r.firm} ${r.reason} ${r.title||''}`).toLowerCase().includes(q)) return false;
+  return true;
+}
+function render(){
+  const list=ALL.filter(match);
+  $('#count').textContent=`${Math.min(shown,list.length).toLocaleString()} of ${list.length.toLocaleString()} shown`;
+  $('#more').disabled=shown>=list.length;
+  $('#more').textContent=shown>=list.length?'End of results':'Show 100 more';
+  if(!list.length){
+    $('#rows').innerHTML=`<div class="state"><b>No match</b>Nothing in the last 18 months fits those filters.</div>`;
+    return;
+  }
+  $('#rows').innerHTML=list.slice(0,shown).map((r,i)=>`
+    <button class="row" data-sev="${r.sev||''}" data-i="${ALL.indexOf(r)}" aria-expanded="false">
+      <div class="c-date">${fmt(r.date)}</div>
+      <div class="c-src">${esc(r.src)}<i>${esc(r.sevLabel||r.cat)}</i></div>
+      <div class="c-prod">${esc(clip(r.product||r.title,120))}
+        <small>${esc(clip(r.reason,140))}</small></div>
+      <div class="c-firm">${esc(clip(r.firm,52))}
+        ${r.where?`<em style="font-style:normal;display:block;font-family:var(--mono);font-size:10.5px;color:var(--meta);margin-top:3px">${esc(r.where)}</em>`:''}</div>
+      <div class="c-tog">+</div>
+    </button>`).join('');
+}
+
+$('#rows').addEventListener('click',e=>{
+  const row=e.target.closest('.row'); if(!row) return;
+  const open=row.getAttribute('aria-expanded')==='true';
+  $$('#rows .detail').forEach(d=>d.remove());
+  $$('#rows .row').forEach(x=>{x.setAttribute('aria-expanded','false');x.querySelector('.c-tog').textContent='+';});
+  if(open) return;
+  row.setAttribute('aria-expanded','true'); row.querySelector('.c-tog').textContent='×';
+  const r=ALL[+row.dataset.i];
+  const f=(k,v,w)=>v?`<div class="dt${w?' wide':''}"><b>${k}</b><span>${esc(v)}</span></div>`:'';
+  const d=document.createElement('div'); d.className='detail';
+  d.innerHTML=
+    f('Product',r.product||r.title,true)+
+    f('Reason / hazard',r.reason,true)+
+    (r.injury?f('Injuries reported',r.injury,true):'')+
+    f('Company',r.firm)+f('Location',r.where)+
+    f('Agency',r.src)+f('Reference',r.id)+
+    f('Risk',r.sevLabel)+f('Status',r.status)+f('Quantity',r.qty)+
+    (r.codes?`<div class="dt wide"><b>Lot / UPC codes</b><span><code>${esc(clip(r.codes,600))}</code></span></div>`:'')+
+    f('Distribution',clip(r.dist,400),true)+
+    (r.url?`<div class="dt wide"><b>Official notice</b><span><a href="${esc(r.url)}" target="_blank" rel="noopener">Read it at ${esc(r.src)} ↗</a></span></div>`:'');
+  row.after(d);
+});
+
+/* ---------- controls ---------- */
+$$('#src button').forEach(b=>b.onclick=()=>{
+  fSrc=b.dataset.s; $$('#src button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  shown=PAGE; render();
+});
+$$('#sev button').forEach(b=>b.onclick=()=>{
+  fSev=b.dataset.v; $$('#sev button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  shown=PAGE; render();
+});
+let deb; $('#q').addEventListener('input',e=>{
+  clearTimeout(deb); const v=e.target.value.trim().toLowerCase();
+  deb=setTimeout(()=>{q=v;shown=PAGE;render();},280);
+});
+$('#more').addEventListener('click',()=>{shown+=PAGE;render();});
+
+/* ---------- boot: all agencies in parallel ---------- */
+(async ()=>{
+  const jobs=[loadFDA('food'),loadFDA('drug'),loadFDA('device'),loadCPSC()];
+  const res=await Promise.allSettled(jobs);
+  const names=['FDA food','FDA drug','FDA device','CPSC'];
+  const failed=[];
+  res.forEach((r,i)=>{ if(r.status==='fulfilled') ALL=ALL.concat(r.value); else failed.push(names[i]); });
+  ALL.sort((a,b)=>(b.date?.getTime()||0)-(a.date?.getTime()||0));
+
+  const n=c=>ALL.filter(r=>r.cat===c).length;
+  $('#n-fda').textContent=(n('food')+n('drug')+n('device')).toLocaleString();
+  ['food','drug','device','consumer'].forEach(c=>$('#c-'+c).textContent=n(c).toLocaleString());
+
+  const cpscDown=failed.includes('CPSC');
+  if(cpscDown){
+    /* CPSC's service is intermittently unavailable — say so rather than
+       showing a zero, which would read as "no consumer recalls exist" */
+    $('#n-cpsc').textContent='offline';
+    document.querySelectorAll('.src')[1].classList.add('off');
+    $('#src').querySelector('[data-s="consumer"]').disabled=true;
+  } else {
+    $('#n-cpsc').textContent=n('consumer').toLocaleString();
+  }
+  $('#status').innerHTML=
+    `${ALL.length.toLocaleString()} recalls from the last 18 months · live from ${4-failed.length} of 4 agencies`+
+    (cpscDown?` · <b style="color:var(--stamp)">CPSC is not responding</b> — their service is intermittently down; try <a href="https://www.cpsc.gov/Recalls" target="_blank" rel="noopener" style="color:var(--stamp)">cpsc.gov/Recalls</a>`:'');
+  render();
+})();
+
+/* ---------- NHTSA vehicle lookup ---------- */
+$('#v-go').addEventListener('click',async ()=>{
+  const mk=$('#v-make').value.trim(), md=$('#v-model').value.trim(), yr=$('#v-year').value.trim();
+  const out=$('#vout'), wrap=$('#vwrap');
+  if(!mk||!md||!yr){ wrap.hidden=false; out.innerHTML=`<div class="state">Enter make, model and year.</div>`; return; }
+  wrap.hidden=false; out.innerHTML=`<div class="state">Checking NHTSA…</div>`;
+  try{
+    const j=await jget(`https://api.nhtsa.gov/recalls/recallsByVehicle?make=${encodeURIComponent(mk)}&model=${encodeURIComponent(md)}&modelYear=${encodeURIComponent(yr)}`);
+    const rs=j?.results||[];
+    if(!rs.length){ out.innerHTML=`<div class="state"><b>No recalls</b>NHTSA lists none for that vehicle. Check the spelling of make and model.</div>`; return; }
+    out.innerHTML=rs.map(r=>`
+      <div class="row" data-sev="1" style="cursor:default">
+        <div class="c-date">${esc(r.NHTSACampaignNumber||'')}</div>
+        <div class="c-prod">${esc(r.Component||'')}
+          <small>${esc(clip(r.Summary,220))}</small>
+          <small style="color:var(--stamp)"><b>Risk:</b> ${esc(clip(r.Consequence,180))}</small>
+          <small><b>Remedy:</b> ${esc(clip(r.Remedy,180))}</small></div>
+        <div class="c-tog"></div>
+      </div>`).join('');
+  }catch(e){ out.innerHTML=`<div class="state">NHTSA didn’t respond. Try again in a moment.</div>`; }
+});
+$('#v-year').addEventListener('keydown',e=>{if(e.key==='Enter')$('#v-go').click();});
+</script>
+</body>
+</html>
